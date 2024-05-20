@@ -265,9 +265,11 @@ warning set the environment variable 'VAGRANT_SUPPRESS_GO_EXPERIMENTAL_WARNING'.
 	}
 
 	bc.Log.Info("basis seeding", "name", bc.flagBasis, "path", bc.flagBasis)
+	bc.Log.Info("Testing if I can add an info log to vagrant-go - if you see this, then this was a success!")
 
 	b, err := bc.client.LoadBasis(bc.flagBasis)
 	if err != nil {
+	    bc.Log.Error("Failed to load basis", "name", bc.flagBasis, "path", bc.flagBasis)
 		return nil, err
 	}
 	// We always have a basis, so seed the basis

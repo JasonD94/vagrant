@@ -141,17 +141,22 @@ func New(ctx context.Context, opts ...Option) (c *Client, err error) {
 }
 
 func (c *Client) LoadBasis(n string) (*vagrant_server.Basis, error) {
+    c.logger.Info("In LoadBasis")
+
 	var basis *vagrant_server.Basis
 	p, err := paths.NamedVagrantConfig(n)
 	if err != nil {
+	    c.logger.Warn("LoadBasis Error - paths.NamedVagrantConfig()")
 		return nil, err
 	}
 
 	basisVagrantfile, err := sdkconfig.FindPath(p, nil)
 	if err != nil {
+	    c.logger.Warn("LoadBasis Error - sdkconfig.FindPath()")
 		return nil, err
 	}
 
+    c.logger.Info("In LoadBasis - calling FindBasis")
 	result, err := c.client.FindBasis(
 		c.ctx,
 		&vagrant_server.FindBasisRequest{
@@ -161,8 +166,10 @@ func (c *Client) LoadBasis(n string) (*vagrant_server.Basis, error) {
 			},
 		},
 	)
+	c.logger.Info("In LoadBasis - after calling FindBasis")
 
 	if err != nil && status.Code(err) != codes.NotFound {
+	    c.logger.Warn("LoadBasis Error - status.Code(error) not found in codes")
 		return nil, err
 	}
 
@@ -198,10 +205,12 @@ func (c *Client) LoadBasis(n string) (*vagrant_server.Basis, error) {
 	)
 
 	if err != nil {
+	    c.logger.Warn("LoadBasis Error - err is not nil")
 		return nil, err
 	}
 	basis = uresult.Basis
 
+    c.logger.Info("return basis")
 	return basis, nil
 }
 
